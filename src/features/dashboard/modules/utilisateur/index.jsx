@@ -12,34 +12,38 @@ import './styles.scss'
 export default function Utilisateur() {
   const [utilisateurs, setUtilisateurs] = useState([])
   const [newUtilisateur] = useState({})
+  const [search, setSearch] = useState('')
   useEffect(() => {
-    async function fetchUtilisateurs() {
-      try {
-        const data = await axios.get(`/utilisateur/findAll`)
-        setUtilisateurs(data.data)
-      } catch (error) {
-        console.log(error)
+    if (search === '') {
+      async function fetchUtilisateurs() {
+        try {
+          const data = await axios.get(`/utilisateur/findAll`)
+          setUtilisateurs(data.data)
+        } catch (error) {
+          console.log(error)
+        }
       }
+      fetchUtilisateurs()
+      console.log(utilisateurs)
     }
-    fetchUtilisateurs()
+    setUtilisateurs([
+      ...utilisateurs.filter((item) => item.nom.includes(search)),
+    ])
     console.log(utilisateurs)
-  }, [])
-  async function create(e) {
-    e.preventDefault()
-    try {
-      const respo = await createUtilisateur(newUtilisateur)
-      const respo1 = await fetchUtilisateurs()
-      setUtilisateurs(respo1.data)
-    } catch (error) {
-      alert('Error while creating user', error.message)
-    }
-  }
+  }, [search])
+
   return (
     <Container>
       <SEO url="/" title="Utilisateur" />
       <div className="container">
         <div className="header">
           <h2>Utilisateur</h2>
+          <input
+            type="text"
+            value={search}
+            placeholder="Filter par le nom de l'utlisateur"
+            onChange={(e) => setSearch(e.target.value)}
+          />
           <Button
             onClick={(e) =>
               (document.getElementById('myModal').style.display = 'block')
