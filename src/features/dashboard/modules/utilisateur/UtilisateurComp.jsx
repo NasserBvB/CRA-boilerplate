@@ -1,17 +1,15 @@
-import Axios from 'axios'
 import React, { useState } from 'react'
 
 import { NavLink } from 'react-router-dom'
 import Button from 'ui/components/Button'
 import {
-  createUtilisateur,
   updateUtilisateur,
   deleteUtilisateur,
   fetchUtilisateurs,
 } from '../../actions/utilisateur'
 
 export default function UtilisateurComp(props) {
-  const [utilisateur, setUtilisateur] = useState(props.utilisateur || {})
+  const [utilisateur] = useState(props.utilisateur || {})
   const [login, setLogin] = useState(utilisateur.login || '')
   const [password, setPassword] = useState(utilisateur.password || '')
   const [profil, setProfil] = useState(
@@ -26,7 +24,7 @@ export default function UtilisateurComp(props) {
   async function update(e) {
     e.preventDefault()
     try {
-      const resp = await updateUtilisateur({
+      await updateUtilisateur({
         id: utilisateur.id,
         login,
         password,
@@ -48,7 +46,7 @@ export default function UtilisateurComp(props) {
   async function deleteU(e) {
     e.preventDefault()
     try {
-      const respo = await deleteUtilisateur(utilisateur.id)
+      await deleteUtilisateur(utilisateur.id)
       const respo2 = await fetchUtilisateurs()
       props.setUtilisateurs(respo2.data)
     } catch (error) {

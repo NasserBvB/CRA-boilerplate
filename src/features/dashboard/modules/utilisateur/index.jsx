@@ -5,13 +5,11 @@ import { NavLink } from 'react-router-dom'
 import Button from 'ui/components/Button'
 import SEO from 'ui/components/SEO'
 import UtilisateurComp from './UtilisateurComp'
-import { createUtilisateur, fetchUtilisateurs } from '../../actions/utilisateur'
 import NewUtilisateur from './newUtilisateur'
 import './styles.scss'
 
 export default function Utilisateur() {
   const [utilisateurs, setUtilisateurs] = useState([])
-  const [newUtilisateur] = useState({})
   const [search, setSearch] = useState('')
   useEffect(() => {
     if (search === '') {
@@ -20,17 +18,15 @@ export default function Utilisateur() {
           const data = await axios.get(`/utilisateur/findAll`)
           setUtilisateurs(data.data)
         } catch (error) {
-          console.log(error)
+          alert(error.message)
         }
       }
       fetchUtilisateurs()
-      console.log(utilisateurs)
     }
     setUtilisateurs([
       ...utilisateurs.filter((item) => item.nom.includes(search)),
     ])
-    console.log(utilisateurs)
-  }, [search])
+  }, [search, utilisateurs])
 
   return (
     <Container>
@@ -94,5 +90,3 @@ export default function Utilisateur() {
     </Container>
   )
 }
-
-const newUtilisateur = () => <div></div>

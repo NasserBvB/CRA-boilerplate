@@ -2,15 +2,10 @@ import React, { useState } from 'react'
 
 import { NavLink } from 'react-router-dom'
 import Button from 'ui/components/Button'
-import {
-  createClient,
-  updateClient,
-  deleteClient,
-  fetchClients,
-} from '../../actions/client'
+import { updateClient, deleteClient, fetchClients } from '../../actions/client'
 
 export default function ClientComp(props) {
-  const [client, setClient] = useState(props.client || {})
+  const [client] = useState(props.client || {})
   const [adresse, setAdresse] = useState(client.adresse || '')
   const [code, setCode] = useState(client.code || '')
   const [ville, setVille] = useState((client.ville && client.ville.id) || '')
@@ -22,7 +17,7 @@ export default function ClientComp(props) {
   async function update(e) {
     e.preventDefault()
     try {
-      const resp = await updateClient({
+      await updateClient({
         id: client.id,
         adresse,
         code,
@@ -43,7 +38,7 @@ export default function ClientComp(props) {
   async function deleteC(e) {
     e.preventDefault()
     try {
-      const respo = await deleteClient(client.id)
+      await deleteClient(client.id)
       const respo2 = await fetchClients()
       props.setClients(respo2.data)
     } catch (error) {

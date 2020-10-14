@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom'
 import { createClient, fetchClients } from 'features/dashboard/actions/client'
 import InputField from 'ui/components/InputField'
 import Button from 'ui/components/Button'

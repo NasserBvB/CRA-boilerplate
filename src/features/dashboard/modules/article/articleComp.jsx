@@ -3,14 +3,13 @@ import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import Button from 'ui/components/Button'
 import {
-  createArticle,
   updateArticle,
   deleteArticle,
   fetchArticles,
 } from '../../actions/article'
 
 export default function ArticleComp(props) {
-  const [article, setArticle] = useState(props.article || {})
+  const [article] = useState(props.article || {})
   const [libele, setLibele] = useState(article.libele || '')
   const [qtemin, setQtemin] = useState(article.qtemin || '')
   const [reference, setReference] = useState(article.reference || '')
@@ -19,7 +18,7 @@ export default function ArticleComp(props) {
   async function update(e) {
     e.preventDefault()
     try {
-      const resp = await updateArticle({
+      await updateArticle({
         id: article.id,
         libele,
         qtemin,
@@ -37,7 +36,7 @@ export default function ArticleComp(props) {
   async function deleteA(e) {
     e.preventDefault()
     try {
-      const respo = await deleteArticle(article.id)
+      await deleteArticle(article.id)
       const respo2 = await fetchArticles()
       props.setArticles(respo2.data)
     } catch (error) {

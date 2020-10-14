@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { fetchClients, createClient } from 'features/dashboard/actions/client'
 import { NavLink } from 'react-router-dom'
 import Container from 'ui/components/Container'
 import SEO from 'ui/components/SEO'
@@ -10,7 +9,6 @@ import ClientComp from './clientComp'
 
 export default function Client() {
   const [clients, setClients] = useState([])
-  const [newClient] = useState({})
   useEffect(() => {
     async function fetchClient() {
       try {
@@ -22,17 +20,8 @@ export default function Client() {
     }
     fetchClient()
     console.log(clients)
-  }, [])
-  async function create(e) {
-    e.preventDefault()
-    try {
-      const respo = await createClient(newClient)
-      const respo1 = fetchClients()
-      setClients(respo1.data)
-    } catch (error) {
-      alert('Error while creating user', error.message)
-    }
-  }
+  }, [clients])
+
   return (
     <Container>
       <SEO url="/" title="Client" />

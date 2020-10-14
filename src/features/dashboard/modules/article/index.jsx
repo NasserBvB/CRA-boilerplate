@@ -6,12 +6,10 @@ import Button from 'ui/components/Button'
 import SEO from 'ui/components/SEO'
 import ArticleComp from './articleComp'
 
-import { createArticle, fetchArticles } from '../../actions/article'
 import NewArticle from './NewArticle'
 
 export default function Article() {
   const [articles, setArticles] = useState([])
-  const [newArticle] = useState({})
   useEffect(() => {
     async function fetchArticle() {
       try {
@@ -22,25 +20,15 @@ export default function Article() {
       }
     }
     fetchArticle()
-    console.log(articles)
-  }, [])
-  async function create(e) {
-    e.preventDefault()
-    try {
-      const respo = await createArticle(newArticle)
-      const respo1 = fetchArticles()
-      setArticles(respo1.data)
-    } catch (error) {
-      alert('Error while creating user', error.message)
-    }
-  }
+  }, [articles])
+
   return (
     <Container>
       <SEO url="/" title="Article" />
       <div class="container">
         <div className="header">
           <h2>Article</h2>
-					
+
           <Button
             onClick={(e) =>
               (document.getElementById('myModal3').style.display = 'block')

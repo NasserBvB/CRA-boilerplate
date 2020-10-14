@@ -5,7 +5,7 @@ import Container from 'ui/components/Container'
 import Logo from 'ui/components/Logo'
 import { useDispatchUser, useUser } from 'features/auth/providers/UserProvider'
 import { logout } from 'features/auth/actions'
-import { Wrapper, Flex, Links } from './styles'
+import { Wrapper, Flex } from './styles'
 
 export default () => {
   const { dispatchUser: dispatch } = useDispatchUser()
