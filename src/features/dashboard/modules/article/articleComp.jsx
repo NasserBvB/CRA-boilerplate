@@ -2,6 +2,17 @@ import React, { useState } from 'react'
 
 import { NavLink } from 'react-router-dom'
 import Button from 'ui/components/Button'
+import TableRow from '@material-ui/core/TableRow'
+import TableCell from '@material-ui/core/TableCell'
+import Select from '@material-ui/core/Select'
+import MenuItem from '@material-ui/core/MenuItem'
+import Input from '@material-ui/core/Input'
+import {
+  DeleteRounded,
+  UpdateRounded,
+  CancelRounded,
+  SaveRounded,
+} from '@material-ui/icons'
 import {
   updateArticle,
   deleteArticle,
@@ -9,21 +20,21 @@ import {
 } from '../../actions/article'
 
 export default function ArticleComp(props) {
-  const [article] = useState(props.article || {})
-  const [libele, setLibele] = useState(article.libele || '')
-  const [qtemin, setQtemin] = useState(article.qtemin || '')
-  const [reference, setReference] = useState(article.reference || '')
-  const [type, setType] = useState((article.type && article.type.id) || '')
+  const [article, setArticle] = useState(props.article || {})
   const [editing, setEditing] = useState(false)
   async function update(e) {
     e.preventDefault()
     try {
+      console.log({
+        ...article,
+        type: { id: article.id, name: article.id === 1 ? 'Type 1' : 'Type 2' },
+      })
       await updateArticle({
-        id: article.id,
-        libele,
-        qtemin,
-        reference,
-        type,
+        ...article,
+        type: {
+          id: article.type,
+          name: article.id === 1 ? 'Type 1' : 'Type 2',
+        },
       })
       const respo9 = await fetchArticles()
       props.setArticles(respo9.data)
@@ -45,89 +56,69 @@ export default function ArticleComp(props) {
   }
 
   return (
-    <li className="table-row">
-      <div className="col col-1" data-label="Article Id">
-        {article.id}
-      </div>
-
-      <div className="col col-5" data-label="Labelle">
+    <TableRow key={article.id}>
+      <TableCell component="th" scope="row">
         {!editing ? (
-          libele
+          article.libele
         ) : (
-          <input value={libele} onChange={(e) => setLibele(e.target.value)} />
+          <Input
+            value={article.libele}
+            onChange={(e) => setArticle({ ...article, libele: e.target.value })}
+          />
         )}
-      </div>
-      <div className="col col-4" data-label="Type">
+      </TableCell>
+      <TableCell align="right">
+        {!editing ? (
+          article.qtemin
+        ) : (
+          <Input
+            value={article.qtemin}
+            onChange={(e) => setArticle({ ...article, qtemin: e.target.value })}
+          />
+        )}
+      </TableCell>
+      <TableCell align="right">
+        {!editing ? (
+          article.reference
+        ) : (
+          <Input
+            value={article.reference}
+            onChange={(e) =>
+              setArticle({ ...article, reference: e.target.value })
+            }
+          />
+        )}
+      </TableCell>
+      <TableCell align="right">
         {!editing ? (
           article.type && article.type.name
         ) : (
-          <select value={type} onChange={(e) => setType(e.target.value)}>
-            <option value="1">type 1</option>
-            <option value="2">type 2</option>
-          </select>
-        )}
-      </div>
-      <div className="col col-7" data-label="Quantite minimale">
-        {!editing ? (
-          qtemin
-        ) : (
-          <input value={qtemin} onChange={(e) => setQtemin(e.target.value)} />
-        )}
-      </div>
-      <div className="col col-8" data-label="Reference">
-        {!editing ? (
-          reference
-        ) : (
-          <input
-            value={reference}
-            onChange={(e) => setReference(e.target.value)}
-          />
-        )}
-      </div>
-
-      <div className="list-item-footer">
-        <div className="col col-10">
-          {!editing ? (
-            <Button
-              type="button"
-              size="large"
-              variant="secondary"
-              onClick={(e) => setEditing(true)}
-            >
-              <NavLink to="#">Modifier</NavLink>
-            </Button>
-          ) : (
-            <>
-              <Button
-                type="button"
-                size="large"
-                variant="secondary"
-                onClick={update}
-              >
-                <NavLink to="#">Enregistrer</NavLink>
-              </Button>
-              <Button
-                type="button"
-                size="large"
-                variant="secondary"
-                onClick={(e) => setEditing(false)}
-              >
-                <NavLink to="#">Annuler</NavLink>
-              </Button>
-            </>
-          )}
-        </div>
-        <div className="col col-11">
-          <Button
-            type="button"
-            size="large"
-            variant="secondary"
-            onClick={deleteA}
+          <Select
+            value={article.type || article.type.id}
+            onChange={(e) => setArticle({ ...article, type: e.target.value })}
           >
-            <NavLink to="#">Supprimer</NavLink>
-          </Button>
-        </div>
-      </div>
-    </li>
+            <MenuItem value={1}>Type 1 </MenuItem>
+            <MenuItem value={2}>Type 2</MenuItem>
+          </Select>
+        )}
+      </TableCell>
+
+      <TableCell align="right">
+        {!editing ? (
+          <UpdateRounded color="primary" onClick={(e) => setEditing(true)} />
+        ) : (
+          <>
+            <SaveRounded color="primary" onClick={update} />
+            <CancelRounded
+              color="secondary"
+              onClick={(e) => setEditing(false)}
+            />
+          </>
+        )}
+      </TableCell>
+      <TableCell align="right">
+        <DeleteRounded color="secondary" onClick={deleteA} />
+      </TableCell>
+    </TableRow>
   )
 }

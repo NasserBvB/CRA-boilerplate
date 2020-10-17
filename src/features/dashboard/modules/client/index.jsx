@@ -6,9 +6,23 @@ import SEO from 'ui/components/SEO'
 import Button from 'ui/components/Button'
 import NewClient from './NewClient'
 import ClientComp from './clientComp'
-
+import { makeStyles } from '@material-ui/core/styles'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableContainer from '@material-ui/core/TableContainer'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import Paper from '@material-ui/core/Paper'
+import { DeleteRounded, UpdateRounded } from '@material-ui/icons'
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650,
+  },
+})
 export default function Client() {
   const [clients, setClients] = useState([])
+  const classes = useStyles()
   useEffect(() => {
     async function fetchClient() {
       try {
@@ -20,7 +34,7 @@ export default function Client() {
     }
     fetchClient()
     console.log(clients)
-  }, [clients])
+  }, [])
 
   return (
     <Container>
@@ -49,30 +63,27 @@ export default function Client() {
             </div>
           </div>
         </div>
-        <ul className="responsive-table">
-          <li className="table-header">
-            <div className="col col-1">Client Id</div>
-            <div className="col col-2">Nom</div>
-            <div className="col col-3">Ville</div>
-            <div className="col col-4">Email</div>
-            <div className="col col-4">Téléphone</div>
-            <div className="col col-4">Code</div>
-            <div className="col col-4">Adresse</div>
-            <div className="col col-4">Date Création</div>
-          </li>
-          <div className="custom-items">
-            {clients &&
-              clients.map((client, index) => {
-                return (
-                  <ClientComp
-                    client={client}
-                    key={index}
-                    setClients={setClients}
-                  />
-                )
-              })}
-          </div>
-        </ul>
+
+        <TableContainer component={Paper}>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Nom</TableCell>
+                <TableCell align="right">Ville</TableCell>
+                <TableCell align="right">Téléphone</TableCell>
+                <TableCell align="right">Code</TableCell>
+                <TableCell align="right">Adresse</TableCell>
+                <TableCell align="right">Modifier</TableCell>
+                <TableCell align="right">Supprimer</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {clients.map((row) => (
+                <ClientComp key={row.id} client={row} setClients={setClients} />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     </Container>
   )

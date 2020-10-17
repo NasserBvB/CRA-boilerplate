@@ -6,11 +6,27 @@ import Button from 'ui/components/Button'
 import SEO from 'ui/components/SEO'
 import UtilisateurComp from './UtilisateurComp'
 import NewUtilisateur from './newUtilisateur'
+import { makeStyles } from '@material-ui/core/styles'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableContainer from '@material-ui/core/TableContainer'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import Paper from '@material-ui/core/Paper'
+import Input from '@material-ui/core/Input'
+
 import './styles.scss'
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650,
+  },
+})
 
 export default function Utilisateur() {
   const [utilisateurs, setUtilisateurs] = useState([])
   const [search, setSearch] = useState('')
+  const classes = useStyles()
   useEffect(() => {
     if (search === '') {
       async function fetchUtilisateurs() {
@@ -22,11 +38,10 @@ export default function Utilisateur() {
         }
       }
       fetchUtilisateurs()
+    } else {
+      setUtilisateurs(utilisateurs.filter((item) => item.nom.includes(search)))
     }
-    setUtilisateurs([
-      ...utilisateurs.filter((item) => item.nom.includes(search)),
-    ])
-  }, [search, utilisateurs])
+  }, [search])
 
   return (
     <Container>
@@ -34,7 +49,7 @@ export default function Utilisateur() {
       <div className="container">
         <div className="header">
           <h2>Utilisateur</h2>
-          <input
+          <Input
             type="text"
             value={search}
             placeholder="Filter par le nom de l'utlisateur"
@@ -61,31 +76,32 @@ export default function Utilisateur() {
             </div>
           </div>
         </div>
-        <ul className="responsive-table">
-          <li className="table-header">
-            <div className="col col-1">Utilisateur Id</div>
-            <div className="col col-2">Login</div>
-            <div className="col col-3">Password</div>
-            <div className="col col-4">Profile</div>
-            <div className="col col-6">Nom</div>
-            <div className="col col-7">Prenom</div>
-            <div className="col col-8">Email</div>
-            <div className="col col-9">Téléphone</div>
-            <div className="col col-10">Date Création</div>
-          </li>
-          <div className="custom-items">
-            {utilisateurs &&
-              utilisateurs.map((utilisateur, index) => {
-                return (
-                  <UtilisateurComp
-                    utilisateur={utilisateur}
-                    key={index}
-                    setUtilisateurs={setUtilisateurs}
-                  />
-                )
-              })}
-          </div>
-        </ul>
+        <TableContainer component={Paper}>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="right">Login</TableCell>
+                <TableCell align="right">Password</TableCell>
+                <TableCell align="right">Profile</TableCell>
+                <TableCell align="right">Nom</TableCell>
+                <TableCell align="right">Prenom</TableCell>
+                <TableCell align="right">Email</TableCell>
+                <TableCell align="right">Téléphone</TableCell>
+                <TableCell align="right">Modifier</TableCell>
+                <TableCell align="right">Supprimer</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {utilisateurs.map((row) => (
+                <UtilisateurComp
+                  key={row.id}
+                  utilisateur={row}
+                  setUtilisateurs={setUtilisateurs}
+                />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     </Container>
   )

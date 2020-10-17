@@ -1,39 +1,33 @@
 import React, { useState } from 'react'
-
-import { NavLink } from 'react-router-dom'
-import Button from 'ui/components/Button'
+import TableRow from '@material-ui/core/TableRow'
+import TableCell from '@material-ui/core/TableCell'
+import Select from '@material-ui/core/Select'
+import MenuItem from '@material-ui/core/MenuItem'
+import Input from '@material-ui/core/Input'
 import {
   updateUtilisateur,
   deleteUtilisateur,
   fetchUtilisateurs,
 } from '../../actions/utilisateur'
+import {
+  DeleteRounded,
+  UpdateRounded,
+  CancelRounded,
+  SaveRounded,
+} from '@material-ui/icons'
 
 export default function UtilisateurComp(props) {
-  const [utilisateur] = useState(props.utilisateur || {})
-  const [login, setLogin] = useState(utilisateur.login || '')
-  const [password, setPassword] = useState(utilisateur.password || '')
-  const [profil, setProfil] = useState(
-    (utilisateur.profil && utilisateur.profil.id) || ''
-  )
-  const [nom, setNom] = useState(utilisateur.nom || '')
-  const [prenom, setPrenom] = useState(utilisateur.prenom || '')
-  const [mail, setMail] = useState(utilisateur.mail || '')
-  const [tel, setTel] = useState(utilisateur.tel || '')
-  const [datecreation] = useState(utilisateur.datecreation || '')
+  const [utilisateur, setUtilisateur] = useState(props.utilisateur || {})
   const [editing, setEditing] = useState(false)
   async function update(e) {
     e.preventDefault()
     try {
       await updateUtilisateur({
-        id: utilisateur.id,
-        login,
-        password,
-        idprofil: parseInt(profil),
-        nom,
-        prenom,
-        tel,
-        mail,
-        datecreation,
+        ...utilisateur,
+        profil: {
+          id: utilisateur.profil,
+          name: utilisateur.profil === 1 ? 'Administrateur' : 'User',
+        },
       })
       const respo9 = await fetchUtilisateurs()
       props.setUtilisateurs(respo9.data)
@@ -53,114 +47,113 @@ export default function UtilisateurComp(props) {
       alert('Erreur lors du suppression', error.message)
     }
   }
-
+  console.log(utilisateur)
   return (
-    <li className="table-row">
-      <div className="col col-1" data-label="Utilisateur Id">
-        {utilisateur.id}
-      </div>
-      <div className="col col-2" data-label="Login">
+    <TableRow key={utilisateur.id}>
+      <TableCell component="th" scope="row">
         {!editing ? (
-          login
+          utilisateur.login
         ) : (
-          <input value={login} onChange={(e) => setLogin(e.target.value)} />
-        )}
-      </div>
-      <div className="col col-3" data-label="Password">
-        {!editing ? (
-          '***********'
-        ) : (
-          <input
-            value={password}
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
+          <Input
+            value={utilisateur.login}
+            onChange={(e) =>
+              setUtilisateur({ ...utilisateur, login: e.target.value })
+            }
           />
         )}
-      </div>
-      <div className="col col-4" data-label="Profile">
+      </TableCell>
+      <TableCell align="right">
+        {!editing ? (
+          '**********'
+        ) : (
+          <Input
+            value={utilisateur.password}
+            type="password"
+            onChange={(e) =>
+              setUtilisateur({ ...utilisateur, password: e.target.value })
+            }
+          />
+        )}
+      </TableCell>
+      <TableCell align="right">
         {!editing ? (
           utilisateur.profil && utilisateur.profil.name
         ) : (
-          <select value={login} onChange={(e) => setProfil(e.target.value)}>
-            <option value="1">Administrateur</option>
-            <option value="2">User</option>
-          </select>
-        )}
-      </div>
-      <div className="col col-5" data-label="Nom">
-        {!editing ? (
-          nom
-        ) : (
-          <input value={nom} onChange={(e) => setNom(e.target.value)} />
-        )}
-      </div>
-      <div className="col col-6" data-label="Prenom">
-        {!editing ? (
-          prenom
-        ) : (
-          <input value={prenom} onChange={(e) => setPrenom(e.target.value)} />
-        )}
-      </div>
-      <div className="col col-7" data-label="Email">
-        {!editing ? (
-          mail
-        ) : (
-          <input value={mail} onChange={(e) => setMail(e.target.value)} />
-        )}
-      </div>
-      <div className="col col-8" data-label="Téléphone">
-        {!editing ? (
-          tel
-        ) : (
-          <input value={tel} onChange={(e) => setTel(e.target.value)} />
-        )}
-      </div>
-      <div className="col col-9" data-label="Date Création">
-        {datecreation}
-      </div>
-      <div className="list-item-footer">
-        <div className="col col-10">
-          {!editing ? (
-            <Button
-              type="button"
-              size="large"
-              variant="secondary"
-              onClick={(e) => setEditing(true)}
-            >
-              <NavLink to="#">Modifier</NavLink>
-            </Button>
-          ) : (
-            <>
-              <Button
-                type="button"
-                size="large"
-                variant="secondary"
-                onClick={update}
-              >
-                <NavLink to="#">Enregistrer</NavLink>
-              </Button>
-              <Button
-                type="button"
-                size="large"
-                variant="secondary"
-                onClick={(e) => setEditing(false)}
-              >
-                <NavLink to="#">Annuler</NavLink>
-              </Button>
-            </>
-          )}
-        </div>
-        <div className="col col-11">
-          <Button
-            type="button"
-            size="large"
-            variant="secondary"
-            onClick={deleteU}
+          <Select
+            value={utilisateur.profil && utilisateur.profil.id}
+            onChange={(e) =>
+              setUtilisateur({ ...utilisateur, profil: e.target.value })
+            }
           >
-            <NavLink to="#">Supprimer</NavLink>
-          </Button>
-        </div>
-      </div>
-    </li>
+            <MenuItem value={1}>Administrateur</MenuItem>
+            <MenuItem value={2}>User</MenuItem>
+          </Select>
+        )}
+      </TableCell>
+      <TableCell align="right">
+        {!editing ? (
+          utilisateur.nom
+        ) : (
+          <Input
+            value={utilisateur.nom}
+            onChange={(e) =>
+              setUtilisateur({ ...utilisateur, nom: e.target.value })
+            }
+          />
+        )}
+      </TableCell>
+      <TableCell align="right">
+        {!editing ? (
+          utilisateur.prenom
+        ) : (
+          <Input
+            value={utilisateur.prenom}
+            onChange={(e) =>
+              setUtilisateur({ ...utilisateur, prenom: e.target.value })
+            }
+          />
+        )}
+      </TableCell>
+      <TableCell align="right">
+        {!editing ? (
+          utilisateur.mail
+        ) : (
+          <Input
+            value={utilisateur.mail}
+            onChange={(e) =>
+              setUtilisateur({ ...utilisateur, mail: e.target.value })
+            }
+          />
+        )}
+      </TableCell>
+      <TableCell align="right">
+        {!editing ? (
+          utilisateur.tel
+        ) : (
+          <Input
+            value={utilisateur.tel}
+            onChange={(e) =>
+              setUtilisateur({ ...utilisateur, tel: e.target.value })
+            }
+          />
+        )}
+      </TableCell>
+      <TableCell align="right">
+        {!editing ? (
+          <UpdateRounded color="primary" onClick={(e) => setEditing(true)} />
+        ) : (
+          <>
+            <SaveRounded color="primary" onClick={update} />
+            <CancelRounded
+              color="secondary"
+              onClick={(e) => setEditing(false)}
+            />
+          </>
+        )}
+      </TableCell>
+      <TableCell align="right">
+        <DeleteRounded color="secondary" onClick={deleteU} />
+      </TableCell>
+    </TableRow>
   )
 }

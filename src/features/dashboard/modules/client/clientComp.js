@@ -1,31 +1,31 @@
 import React, { useState } from 'react'
 
-import { NavLink } from 'react-router-dom'
-import Button from 'ui/components/Button'
+import TableRow from '@material-ui/core/TableRow'
+import TableCell from '@material-ui/core/TableCell'
+import Input from '@material-ui/core/Input'
+import Select from '@material-ui/core/Select'
+import MenuItem from '@material-ui/core/MenuItem'
+import {
+  DeleteRounded,
+  UpdateRounded,
+  CancelRounded,
+  SaveRounded,
+} from '@material-ui/icons'
 import { updateClient, deleteClient, fetchClients } from '../../actions/client'
 
 export default function ClientComp(props) {
-  const [client] = useState(props.client || {})
-  const [adresse, setAdresse] = useState(client.adresse || '')
-  const [code, setCode] = useState(client.code || '')
-  const [ville, setVille] = useState((client.ville && client.ville.id) || '')
-  const [mail, setMail] = useState(client.mail || '')
-  const [tel, setTel] = useState(client.tel || '')
-  const [nom, setNom] = useState(client.nom || '')
-  const [datecreation] = useState(client.datecreation || '')
+  const [client, setClient] = useState(props.client || {})
   const [editing, setEditing] = useState(false)
   async function update(e) {
     e.preventDefault()
     try {
+      console.log(client)
       await updateClient({
-        id: client.id,
-        adresse,
-        code,
-        ville,
-        nom,
-        tel,
-        mail,
-        datecreation,
+        ...client,
+        ville: {
+          id: client.ville,
+          name: client.ville == '1' ? 'Rabat' : 'Casa',
+        },
       })
       const respo9 = await fetchClients()
       props.setClients(respo9.data)
@@ -38,6 +38,7 @@ export default function ClientComp(props) {
   async function deleteC(e) {
     e.preventDefault()
     try {
+      console.log(client)
       await deleteClient(client.id)
       const respo2 = await fetchClients()
       props.setClients(respo2.data)
@@ -47,102 +48,80 @@ export default function ClientComp(props) {
   }
 
   return (
-    <li className="table-row">
-      <div className="col col-1" data-label="Client Id">
-        {client.id}
-      </div>
-
-      <div className="col col-5" data-label="Nom">
+    <TableRow key={client.id}>
+      <TableCell component="th" scope="row">
         {!editing ? (
-          nom
+          client.nom
         ) : (
-          <input value={nom} onChange={(e) => setNom(e.target.value)} />
+          <Input
+            value={client.nom}
+            onChange={(e) => setClient({ ...client, nom: e.target.value })}
+          />
         )}
-      </div>
-      <div className="col col-4" data-label="Ville">
+      </TableCell>
+      <TableCell align="right">
         {!editing ? (
-          client.ville && client.ville.name
-        ) : (
-          <select value={ville} onChange={(e) => setVille(e.target.value)}>
-            <option value="1">Casablanca</option>
-            <option value="2">Rabat</option>
-          </select>
-        )}
-      </div>
-      <div className="col col-7" data-label="Email">
-        {!editing ? (
-          mail
-        ) : (
-          <input value={mail} onChange={(e) => setMail(e.target.value)} />
-        )}
-      </div>
-      <div className="col col-8" data-label="Téléphone">
-        {!editing ? (
-          tel
-        ) : (
-          <input value={tel} onChange={(e) => setTel(e.target.value)} />
-        )}
-      </div>
-      <div className="col col-8" data-label="Code">
-        {!editing ? (
-          code
-        ) : (
-          <input value={code} onChange={(e) => setCode(e.target.value)} />
-        )}
-      </div>
-      <div className="col col-8" data-label="Adresse">
-        {!editing ? (
-          adresse
-        ) : (
-          <input value={adresse} onChange={(e) => setAdresse(e.target.value)} />
-        )}
-      </div>
-      <div className="col col-9" data-label="Date Création">
-        {datecreation}
-      </div>
-      <div className="list-item-footer">
-        <div className="col col-10">
-          {!editing ? (
-            <Button
-              type="button"
-              size="large"
-              variant="secondary"
-              onClick={(e) => setEditing(true)}
-            >
-              <NavLink to="#">Modifier</NavLink>
-            </Button>
+          client.ville == '1' ? (
+            'Rabat'
           ) : (
-            <>
-              <Button
-                type="button"
-                size="large"
-                variant="secondary"
-                onClick={update}
-              >
-                <NavLink to="#">Enregistrer</NavLink>
-              </Button>
-              <Button
-                type="button"
-                size="large"
-                variant="secondary"
-                onClick={(e) => setEditing(false)}
-              >
-                <NavLink to="#">Annuler</NavLink>
-              </Button>
-            </>
-          )}
-        </div>
-        <div className="col col-11">
-          <Button
-            type="button"
-            size="large"
-            variant="secondary"
-            onClick={deleteC}
+            'Casa'
+          )
+        ) : (
+          <Select
+            value={client.ville || client.ville.id}
+            onChange={(e) => setClient({ ...client, ville: e.target.value })}
           >
-            <NavLink to="#">Supprimer</NavLink>
-          </Button>
-        </div>
-      </div>
-    </li>
+            <MenuItem value="1">Rabat </MenuItem>
+            <MenuItem value="2">Casa</MenuItem>
+          </Select>
+        )}
+      </TableCell>
+      <TableCell align="right">
+        {!editing ? (
+          client.tel
+        ) : (
+          <Input
+            value={client.tel}
+            onChange={(e) => setClient({ ...client, tel: e.target.value })}
+          />
+        )}
+      </TableCell>
+      <TableCell align="right">
+        {!editing ? (
+          client.code
+        ) : (
+          <Input
+            value={client.code}
+            onChange={(e) => setClient({ ...client, code: e.target.value })}
+          />
+        )}
+      </TableCell>
+      <TableCell align="right">
+        {!editing ? (
+          client.adresse
+        ) : (
+          <Input
+            value={client.adresse}
+            onChange={(e) => setClient({ ...client, adresse: e.target.value })}
+          />
+        )}
+      </TableCell>
+      <TableCell align="right">
+        {!editing ? (
+          <UpdateRounded color="primary" onClick={(e) => setEditing(true)} />
+        ) : (
+          <>
+            <SaveRounded color="primary" onClick={update} />
+            <CancelRounded
+              color="secondary"
+              onClick={(e) => setEditing(false)}
+            />
+          </>
+        )}
+      </TableCell>
+      <TableCell align="right">
+        <DeleteRounded color="secondary" onClick={deleteC} />
+      </TableCell>
+    </TableRow>
   )
 }
