@@ -16,7 +16,10 @@ import Paper from '@material-ui/core/Paper'
 import { fetchClients } from 'features/dashboard/actions/client'
 import { fetchArticles } from 'features/dashboard/actions/article'
 import Checkbox from '@material-ui/core/Checkbox'
-
+import TableFooter from '@material-ui/core/TableFooter'
+import TablePagination from '@material-ui/core/TablePagination'
+import { createFacture } from 'features/dashboard/actions/facture'
+import TablePaginationActions from 'features/dashboard/components/TablePaginationActions'
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -60,7 +63,8 @@ export default (props) => {
   const steps = getSteps()
   const [clients, setClients] = React.useState([])
   const [articles, setArticles] = React.useState([])
-
+  const [page, setPage] = React.useState(0)
+  const [rowsPerPage, setRowsPerPage] = React.useState(4)
   React.useEffect(() => {
     const fetchData = async () => {
       const clts = await fetchClients()
@@ -87,28 +91,30 @@ export default (props) => {
     setActiveStep(0)
   }
 
-  const handleSelectedChange = (e, id, index) => {
+  const handleSelectedChange = (e, id, idArticle) => {
     setFacture({
       ...facture,
       articles:
         facture.articles.length > 0 &&
         facture.articles.find((item) => item.id === id)
           ? facture.articles.map((item, idx) => {
-              return index === idx
+              return idArticle === item.id
                 ? {
                     ...item,
-                    selected: facture.articles[index]
-                      ? !facture.articles[index].selected
+                    selected: facture.articles[idx]
+                      ? !facture.articles.find((ite) => ite.id === idArticle)
+                          .selected
                       : true,
                   }
                 : item
             })
           : articles.map((item, idx) => {
-              return index === idx
+              return idArticle === item.id
                 ? {
                     ...item,
-                    selected: facture.articles[index]
-                      ? !facture.articles[index].selected
+                    selected: facture.articles[idx]
+                      ? !facture.articles.find((ite) => ite.id === idArticle)
+                          .selected
                       : true,
                   }
                 : item
@@ -116,14 +122,14 @@ export default (props) => {
     })
   }
 
-  const handleQuantiteChange = (e, id, index) => {
+  const handleQuantiteChange = (e, id, idArticle) => {
     setFacture({
       ...facture,
       articles:
         facture.articles.length > 0 &&
         facture.articles.find((item) => item.id === id)
           ? facture.articles.map((item, idx) => {
-              return index === idx
+              return idArticle === item.id
                 ? {
                     ...item,
                     quantite: parseInt(e.target.value),
@@ -131,7 +137,7 @@ export default (props) => {
                 : item
             })
           : articles.map((item, idx) => {
-              return index === idx
+              return idArticle === item.id
                 ? {
                     ...item,
                     quantite: parseInt(e.target.value),
@@ -139,6 +145,34 @@ export default (props) => {
                 : item
             }),
     })
+  }
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage)
+  }
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
+  }
+
+  const create = async () => {
+    try {
+      const payload = {
+        client: facture.client,
+        articles: facture.articles
+          .filter((item) => item.selected)
+          .map((item) => {
+            return {
+              id: item.id,
+              quantite: item.quantite,
+            }
+          }),
+      }
+      await createFacture(facture)
+    } catch (error) {
+      alert('Error lors du creation')
+    }
   }
 
   return (
@@ -147,7 +181,13 @@ export default (props) => {
         {steps.map((label) => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
-            <StepContent style={{ display: 'grid', justifyContent: 'center' }}>
+            <StepContent
+              style={{
+                display: 'grid',
+                justifyContent: 'center',
+                width: '100%',
+              }}
+            >
               {label === 'Selectionner client' && (
                 <div style={{ padding: '5px' }}>
                   <Select
@@ -183,17 +223,27 @@ export default (props) => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {articles.map((row, index) => (
+                        {(rowsPerPage > 0
+                          ? articles.slice(
+                              page * rowsPerPage,
+                              page * rowsPerPage + rowsPerPage
+                            )
+                          : articles
+                        ).map((row, index) => (
                           <>
                             <TableRow key={index}>
                               <TableCell component="th" scope="row">
                                 <Checkbox
                                   checked={
-                                    facture.articles[index] &&
-                                    facture.articles[index].selected
+                                    facture.articles.find(
+                                      (ite) => ite.id === row.id
+                                    ) &&
+                                    facture.articles.find(
+                                      (ite) => ite.id === row.id
+                                    ).selected
                                   }
                                   onChange={(e) =>
-                                    handleSelectedChange(e, row.id, index)
+                                    handleSelectedChange(e, row.id, row.id)
                                   }
                                   label={''}
                                 />
@@ -205,11 +255,15 @@ export default (props) => {
                                 <Input
                                   type="number"
                                   value={
-                                    facture.articles[index] &&
-                                    facture.articles[index].quantite
+                                    facture.articles.find(
+                                      (ite) => ite.id === row.id
+                                    ) &&
+                                    facture.articles.find(
+                                      (ite) => ite.id === row.id
+                                    ).quantite
                                   }
                                   onChange={(e) =>
-                                    handleQuantiteChange(e, row.id, index)
+                                    handleQuantiteChange(e, row.id, row.id)
                                   }
                                 />
                               </TableCell>
@@ -217,8 +271,49 @@ export default (props) => {
                           </>
                         ))}
                       </TableBody>
+                      <TableFooter>
+                        <TableRow>
+                          <TablePagination
+                            rowsPerPageOptions={[
+                              5,
+                              { label: 'All', value: -1 },
+                            ]}
+                            colSpan={3}
+                            count={articles.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            SelectProps={{
+                              inputProps: { 'aria-label': 'rows per page' },
+                              native: true,
+                            }}
+                            onChangePage={handleChangePage}
+                            onChangeRowsPerPage={handleChangeRowsPerPage}
+                            ActionsComponent={TablePaginationActions}
+                          />
+                        </TableRow>
+                      </TableFooter>
                     </Table>
                   </TableContainer>
+                  <div className="buttons-save-facture">
+                    <Button variant="outlined" color="primary" onClick={create}>
+                      Enregistrer
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={(e) => props.setOpen(false)}
+                    >
+                      Annuler
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {label === 'Impression du recu' && (
+                <div style={{ padding: '5px' }}>
+                  <Button variant="outlined" color="primary">
+                    Imprimer la facture
+                  </Button>
                 </div>
               )}
             </StepContent>

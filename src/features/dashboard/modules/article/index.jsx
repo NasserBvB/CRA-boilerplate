@@ -13,9 +13,11 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
+import TableFooter from '@material-ui/core/TableFooter'
+import TablePagination from '@material-ui/core/TablePagination'
+import TablePaginationActions from 'features/dashboard/components/TablePaginationActions'
 
 import NewArticle from './NewArticle'
-import Utilisateur from '../utilisateur'
 import { Modal } from '@material-ui/core'
 const useStyles = makeStyles({
   table: {
@@ -31,6 +33,8 @@ const useStyles = makeStyles({
 export default function Article() {
   const [articles, setArticles] = useState([])
   const classes = useStyles()
+  const [page, setPage] = React.useState(0)
+  const [rowsPerPage, setRowsPerPage] = React.useState(5)
   const [open, setOpen] = React.useState(false)
   useEffect(() => {
     async function fetchArticle() {
@@ -43,6 +47,14 @@ export default function Article() {
     }
     fetchArticle()
   }, [])
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage)
+  }
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 5))
+    setPage(0)
+  }
   const handleClose = () => {
     setOpen(false)
   }
@@ -86,7 +98,13 @@ export default function Article() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {articles.map((row) => (
+              {(rowsPerPage > 0
+                ? articles.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : articles
+              ).map((row, index) => (
                 <ArticleComp
                   key={row.id}
                   article={row}
@@ -94,6 +112,24 @@ export default function Article() {
                 />
               ))}
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 20, { label: 'All', value: -1 }]}
+                  colSpan={3}
+                  count={articles.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    inputProps: { 'aria-label': 'rows per page' },
+                    native: true,
+                  }}
+                  onChangePage={handleChangePage}
+                  onChangeRowsPerPage={handleChangeRowsPerPage}
+                  ActionsComponent={TablePaginationActions}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </TableContainer>
       </div>

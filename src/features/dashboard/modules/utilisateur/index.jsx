@@ -15,7 +15,9 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import Input from '@material-ui/core/Input'
-
+import TableFooter from '@material-ui/core/TableFooter'
+import TablePagination from '@material-ui/core/TablePagination'
+import TablePaginationActions from 'features/dashboard/components/TablePaginationActions'
 import './styles.scss'
 import { Modal } from '@material-ui/core'
 const useStyles = makeStyles({
@@ -34,6 +36,16 @@ export default function Utilisateur() {
   const [search, setSearch] = useState('')
   const classes = useStyles()
   const [open, setOpen] = React.useState(false)
+  const [page, setPage] = React.useState(0)
+  const [rowsPerPage, setRowsPerPage] = React.useState(5)
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage)
+  }
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
+  }
   useEffect(() => {
     if (search === '') {
       async function fetchUtilisateurs() {
@@ -103,7 +115,13 @@ export default function Utilisateur() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {utilisateurs.map((row) => (
+              {(rowsPerPage > 0
+                ? utilisateurs.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : utilisateurs
+              ).map((row, index) => (
                 <UtilisateurComp
                   key={row.id}
                   utilisateur={row}
@@ -111,6 +129,24 @@ export default function Utilisateur() {
                 />
               ))}
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 20, { label: 'All', value: -1 }]}
+                  colSpan={3}
+                  count={utilisateurs.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    inputProps: { 'aria-label': 'rows per page' },
+                    native: true,
+                  }}
+                  onChangePage={handleChangePage}
+                  onChangeRowsPerPage={handleChangeRowsPerPage}
+                  ActionsComponent={TablePaginationActions}
+                />
+              </TableRow>
+            </TableFooter>
           </Table>
         </TableContainer>
       </div>

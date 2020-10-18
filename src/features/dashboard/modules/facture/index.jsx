@@ -67,7 +67,7 @@ export default function Facture() {
             onClose={handleClose}
             className={classes1.modal}
           >
-            <FactureComp />
+            <FactureComp setOpen={setOpen} />
           </Modal>
         </div>
 
