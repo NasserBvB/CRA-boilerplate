@@ -45,71 +45,88 @@ export default (props) => {
     }
   }
   return (
-    <Card className={classes.root} variant="outlined">
+    <Card
+      className={classes.root}
+      variant="outlined"
+      style={{ display: 'grid', justifyContent: 'center' }}
+    >
       <h4>Creer Un nouveau Client</h4>
       <CardContent style={{ display: 'grid', justifyContent: 'center' }}>
-        <Input
-          type="text"
-          name="mail"
-          placeholder="Email"
-          onChange={(e) => setMail(e.target.value)}
-          value={mail}
-        />
-        <Select
-          label="Ville"
-          onChange={(e) => setVille(e.target.value)}
-          value={ville}
-          placeholder="Selectionnez une ville"
-        >
-          <MenuItem value="0" disabled>
-            Selectionnez une ville
-          </MenuItem>
-          <MenuItem value="1">Casa</MenuItem>
-          <MenuItem value="2">Rabat</MenuItem>
-        </Select>
-        <Input
-          type="text"
-          name="nom"
-          placeholder="Nom"
-          onChange={(e) => setNom(e.target.value)}
-          value={nom}
-        />
-        <Input
-          type="text"
-          name="tel"
-          placeholder="Téléphone"
-          onChange={(e) => setTel(e.target.value)}
-          value={tel}
-        />
-
-        <Input
-          type="text"
-          name="adresse"
-          placeholder="Adresse"
-          onChange={(e) => setAdresse(e.target.value)}
-          value={adresse}
-        />
-        <Input
-          type="text"
-          name="code"
-          placeholder="Code"
-          onChange={(e) => setCode(e.target.value)}
-          value={code}
-        />
-        <Center>
-          <Button variant="contained" color="primary" onClick={create}>
-            <span>Enregistrer</span>
-          </Button>
-          <Button variant="contained" color="secondary">
-            <span>Annuler</span>
-          </Button>
-        </Center>
-        <Center>
-          {/* <p>
+        <div className="input-formulaire">
+          <Input
+            type="text"
+            name="mail"
+            placeholder="Email"
+            onChange={(e) => setMail(e.target.value)}
+            value={mail}
+          />
+        </div>
+        <div className="input-formulaire">
+          <Select
+            label="Ville"
+            onChange={(e) => setVille(e.target.value)}
+            value={ville}
+            placeholder="Selectionnez une ville"
+          >
+            <MenuItem value="0" disabled>
+              Selectionnez une ville
+            </MenuItem>
+            <MenuItem value="1">Casa</MenuItem>
+            <MenuItem value="2">Rabat</MenuItem>
+          </Select>
+        </div>
+        <div className="input-formulaire">
+          <Input
+            type="text"
+            name="nom"
+            placeholder="Nom"
+            onChange={(e) => setNom(e.target.value)}
+            value={nom}
+          />
+        </div>
+        <div className="input-formulaire">
+          <Input
+            type="text"
+            name="tel"
+            placeholder="Téléphone"
+            onChange={(e) => setTel(e.target.value)}
+            value={tel}
+          />
+        </div>
+        <div className="input-formulaire">
+          <Input
+            type="text"
+            name="adresse"
+            placeholder="Adresse"
+            onChange={(e) => setAdresse(e.target.value)}
+            value={adresse}
+          />
+        </div>
+        <div className="input-formulaire">
+          <Input
+            type="text"
+            name="code"
+            placeholder="Code"
+            onChange={(e) => setCode(e.target.value)}
+            value={code}
+          />
+        </div>
+        <div className="input-formulaire">
+          <Center>
+            <Button variant="contained" color="primary" onClick={create}>
+              <span>Enregistrer</span>
+            </Button>
+            <Button variant="contained" color="secondary">
+              <span>Annuler</span>
+            </Button>
+          </Center>
+          <Center>
+            {/* <p>
 						Don’t have an account? No worries,{' '}
 						<Link to="/signup">you can create one now</Link>
 					</p> */}
-        </Center>
+          </Center>
+        </div>
       </CardContent>
     </Card>
   )

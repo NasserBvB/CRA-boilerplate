@@ -60,8 +60,17 @@ export default function Article() {
           >
             {<NavLink to="#">Creer un Article</NavLink>}
           </Button>
-          <Modal open={open} onClose={handleClose} className={classes.Modal}>
-            <NewArticle setArticles={setArticles} />
+          <Modal
+            open={open}
+            onClose={handleClose}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '20px',
+            }}
+          >
+            <NewArticle setArticles={setArticles} setOpen={setOpen} />
           </Modal>
         </div>
         <TableContainer component={Paper}>
