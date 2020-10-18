@@ -56,7 +56,7 @@ export default function ArticleComp(props) {
   }
 
   return (
-    <TableRow key={article.id}>
+    <TableRow key={article.id} >
       <TableCell component="th" scope="row">
         {!editing ? (
           article.libele

@@ -45,7 +45,11 @@ export default (props) => {
     }
   }
   return (
-    <Card className={classes.root} variant="outlined" style={{ display: 'grid', justifyContent: 'center' }}>
+    <Card
+      className={classes.root}
+      variant="outlined"
+      style={{ display: 'grid', justifyContent: 'center' }}
+    >
       <h4>Creer Un nouveau Article</h4>
       <CardContent style={{ display: 'grid', justifyContent: 'center' }}>
         <div className="input-formulaire">
@@ -69,7 +73,7 @@ export default (props) => {
         </div>
         <div className="input-formulaire">
           <Input
-            type="text"
+            type="number"
             name="nom"
             placeholder="Quantite minimale"
             onChange={(e) => setQtemin(e.target.value)}
