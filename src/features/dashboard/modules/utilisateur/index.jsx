@@ -71,8 +71,20 @@ export default function Utilisateur() {
           >
             {<NavLink to="#">Creer un Utilisateur</NavLink>}
           </Button>
-          <Modal open={open} onClose={handleClose} className={classes.Modal}>
-            <NewUtilisateur setUtilisateurs={setUtilisateurs} />
+          <Modal
+            open={open}
+            onClose={handleClose}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '20px',
+            }}
+          >
+            <NewUtilisateur
+              setUtilisateurs={setUtilisateurs}
+              setOpen={setOpen}
+            />
           </Modal>
         </div>
         <TableContainer component={Paper}>

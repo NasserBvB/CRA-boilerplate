@@ -72,7 +72,7 @@ export default function Client() {
             padding: '20px',
           }}
         >
-          <NewClient setClients={setClients} />
+          <NewClient setClients={setClients} setOpen={setOpen} />
         </Modal>
 
         <TableContainer component={Paper}>

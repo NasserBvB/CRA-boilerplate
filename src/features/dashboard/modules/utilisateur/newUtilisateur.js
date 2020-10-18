@@ -3,16 +3,26 @@ import {
   createUtilisateur,
   fetchUtilisateurs,
 } from 'features/dashboard/actions/utilisateur'
-import InputField from 'ui/components/InputField'
-import Button from 'ui/components/Button'
-import Card from 'ui/components/Card'
-import {
-  Title,
-  CardWrapper,
-  Center,
-} from 'features/dashboard/components/shared-style'
+import Button from '@material-ui/core/Button'
+import { makeStyles } from '@material-ui/core/styles'
+import { Card, CardContent, Input, Select, MenuItem } from '@material-ui/core'
+import { Center } from 'features/dashboard/components/shared-style'
+const useStyles = makeStyles({
+  root: {
+    minWidth: '300px',
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  title: {
+    fontSize: 14,
+  },
+})
 export default (props) => {
   const [login, setLogin] = useState('')
+  const classes = useStyles()
   const [password, setPassword] = useState('')
   const [idprofil, setProfil] = useState('')
   const [nom, setNom] = useState('')
@@ -35,92 +45,71 @@ export default (props) => {
       console.log(resp)
       const respo = await fetchUtilisateurs()
       props.setUtilisateurs(respo.data)
-      document.getElementById('myModal').style.display = 'none'
+      props.setOpen(false)
     } catch (err) {
       alert('Erreur lors du creation', err.message)
     }
   }
   return (
-    <>
-      <Title>Creer Un nouveau utilisateur</Title>
-      <CardWrapper as={Card}>
-        <InputField label="Username">
-          <input
-            type="text"
-            name="login"
-            placeholder="Username"
-            onChange={(e) => setLogin(e.target.value)}
-            value={login}
-          />
-        </InputField>
-        <InputField label="Password">
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-          />
-        </InputField>
-        <InputField label="Email">
-          <input
-            type="text"
-            name="mail"
-            placeholder="Email"
-            onChange={(e) => setMail(e.target.value)}
-            value={mail}
-          />
-        </InputField>
-        <InputField
+    <Card className={classes.root} variant="outlined">
+      <h4>Creer Un nouveau utilisateur</h4>
+      <CardContent style={{ display: 'grid', justifyContent: 'center' }}>
+        <Input
+          type="text"
+          name="login"
+          placeholder="Username"
+          onChange={(e) => setLogin(e.target.value)}
+          value={login}
+        />
+        <Input
+          type="password"
+          name="password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+        />
+        <Input
+          type="text"
+          name="mail"
+          placeholder="Email"
+          onChange={(e) => setMail(e.target.value)}
+          value={mail}
+        />
+        <Select
           label="Profile"
           onChange={(e) => setProfil(e.target.value)}
           value={idprofil}
         >
-          <select>
-            <option value="1">Administrateur</option>
-            <option value="2">User</option>
-          </select>
-        </InputField>
-        <InputField label="Nom">
-          <input
-            type="text"
-            name="nom"
-            placeholder="Nom"
-            onChange={(e) => setNom(e.target.value)}
-            value={nom}
-          />
-        </InputField>
-        <InputField label="Prenom">
-          <input
-            type="text"
-            name="prenom"
-            placeholder="Prenom"
-            onChange={(e) => setPrenom(e.target.value)}
-            value={prenom}
-          />
-        </InputField>
-        <InputField label="Téléphone">
-          <input
-            type="text"
-            name="tel"
-            placeholder="Téléphone"
-            onChange={(e) => setTel(e.target.value)}
-            value={tel}
-          />
-        </InputField>
+          <MenuItem value="1">Administrateur</MenuItem>
+          <MenuItem value="2">User</MenuItem>
+        </Select>
+        <Input
+          type="text"
+          name="nom"
+          placeholder="Nom"
+          onChange={(e) => setNom(e.target.value)}
+          value={nom}
+        />
+        <Input
+          type="text"
+          name="prenom"
+          placeholder="Prenom"
+          onChange={(e) => setPrenom(e.target.value)}
+          value={prenom}
+        />
+        <Input
+          type="text"
+          name="tel"
+          placeholder="Téléphone"
+          onChange={(e) => setTel(e.target.value)}
+          value={tel}
+        />
 
         <Center>
-          <Button type="submit" size="large" variant="primary" onClick={create}>
+          <Button variant="contained" color="primary" onClick={create}>
             <span>Enregistrer</span>
           </Button>
-          <Button
-            type="cancel"
-            size="large"
-            variant="primary"
-            onClick={(e) =>
-              (document.getElementById('myModal').style.display = 'none')
-            }
-          >
+          <Button variant="contained" color="secondary">
             <span>Annuler</span>
           </Button>
         </Center>
@@ -130,7 +119,7 @@ export default (props) => {
 						<Link to="/signup">you can create one now</Link>
 					</p> */}
         </Center>
-      </CardWrapper>
-    </>
+      </CardContent>
+    </Card>
   )
 }
