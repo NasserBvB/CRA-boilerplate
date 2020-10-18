@@ -23,11 +23,12 @@ const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: '20px',
   },
 })
 export default function Facture() {
   const [factures, setFactures] = useState([])
-  const classes = useStyles()
+  const classes1 = useStyles()
   const [open, setOpen] = useState(false)
   useEffect(() => {
     async function fetchFactures() {
@@ -48,7 +49,7 @@ export default function Facture() {
 
   return (
     <Container>
-      <SEO url="/" title="Client" />
+      <SEO url="/" title="Facture" />
       <div class="container">
         <div className="header">
           <h2>Facture</h2>
@@ -59,13 +60,13 @@ export default function Facture() {
           >
             {<NavLink to="#">Creer une facture</NavLink>}
           </Button>
-          <Modal open={open} onClose={handleClose} className={classes.modal}>
+          <Modal open={open} onClose={handleClose} className={classes1.modal}>
             <FactureComp facture={{}} />
           </Modal>
         </div>
 
         <TableContainer component={Paper}>
-          <Table className={classes.table} aria-label="simple table">
+          <Table className={classes1.table} aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell align="left">Client</TableCell>

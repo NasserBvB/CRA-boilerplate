@@ -1,21 +1,9 @@
 import React, { useState } from 'react'
 import { createClient, fetchClients } from 'features/dashboard/actions/client'
-import InputField from 'ui/components/InputField'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
-import {
-  Title,
-  CardWrapper,
-  Center,
-} from 'features/dashboard/components/shared-style'
-import {
-  CardHeader,
-  Card,
-  CardContent,
-  Input,
-  Select,
-  MenuItem,
-} from '@material-ui/core'
+import { Center } from 'features/dashboard/components/shared-style'
+import { Card, CardContent, Input, Select, MenuItem } from '@material-ui/core'
 const useStyles = makeStyles({
   root: {
     minWidth: '300px',
@@ -27,9 +15,6 @@ const useStyles = makeStyles({
   },
   title: {
     fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
   },
 })
 export default (props) => {
@@ -64,7 +49,6 @@ export default (props) => {
       <h4>Creer Un nouveau Client</h4>
       <CardContent style={{ display: 'grid', justifyContent: 'center' }}>
         <Input
-          padding="5px"
           type="text"
           name="mail"
           placeholder="Email"
