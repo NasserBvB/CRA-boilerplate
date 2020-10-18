@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Container from 'ui/components/Container'
 import { NavLink } from 'react-router-dom'
-import Button from 'ui/components/Button'
+import Button from '@material-ui/core/Button'
 import SEO from 'ui/components/SEO'
 import UtilisateurComp from './UtilisateurComp'
 import NewUtilisateur from './newUtilisateur'
@@ -56,6 +56,8 @@ export default function Utilisateur() {
             onChange={(e) => setSearch(e.target.value)}
           />
           <Button
+            variant="outlined"
+            color="primary"
             onClick={(e) =>
               (document.getElementById('myModal').style.display = 'block')
             }
@@ -80,15 +82,15 @@ export default function Utilisateur() {
           <Table className={classes.table} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="right">Login</TableCell>
-                <TableCell align="right">Password</TableCell>
-                <TableCell align="right">Profile</TableCell>
-                <TableCell align="right">Nom</TableCell>
-                <TableCell align="right">Prenom</TableCell>
-                <TableCell align="right">Email</TableCell>
-                <TableCell align="right">Téléphone</TableCell>
-                <TableCell align="right">Modifier</TableCell>
-                <TableCell align="right">Supprimer</TableCell>
+                <TableCell align="left">Login</TableCell>
+                <TableCell align="left">Password</TableCell>
+                <TableCell align="left">Profile</TableCell>
+                <TableCell align="left">Nom</TableCell>
+                <TableCell align="left">Prenom</TableCell>
+                <TableCell align="left">Email</TableCell>
+                <TableCell align="left">Téléphone</TableCell>
+                <TableCell align="left">Modifier</TableCell>
+                <TableCell align="left">Supprimer</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

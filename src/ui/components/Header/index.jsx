@@ -29,6 +29,10 @@ export default () => {
             <NavLink to="/client" size="large" variant="secondary">
               Client
             </NavLink>
+            <NavLink to="/facture" size="large" variant="secondary">
+              Facture
+            </NavLink>
+
             <Button
               type="button"
               onClick={() => logout(dispatch)}

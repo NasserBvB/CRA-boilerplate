@@ -20,13 +20,7 @@ export default function ClientComp(props) {
     e.preventDefault()
     try {
       console.log(client)
-      await updateClient({
-        ...client,
-        ville: {
-          id: client.ville,
-          name: client.ville == '1' ? 'Rabat' : 'Casa',
-        },
-      })
+      await updateClient(client)
       const respo9 = await fetchClients()
       props.setClients(respo9.data)
     } catch (error) {
@@ -68,7 +62,7 @@ export default function ClientComp(props) {
           )
         ) : (
           <Select
-            value={client.ville || client.ville.id}
+            value={client.ville}
             onChange={(e) => setClient({ ...client, ville: e.target.value })}
           >
             <MenuItem value="1">Rabat </MenuItem>

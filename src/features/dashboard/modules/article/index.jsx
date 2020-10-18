@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { NavLink } from 'react-router-dom'
 import Container from 'ui/components/Container'
-import Button from 'ui/components/Button'
+import Button from '@material-ui/core/Button'
 import SEO from 'ui/components/SEO'
 import ArticleComp from './articleComp'
 import { makeStyles } from '@material-ui/core/styles'
@@ -45,6 +45,8 @@ export default function Article() {
           <h2>Article</h2>
 
           <Button
+            variant="outlined"
+            color="primary"
             onClick={(e) =>
               (document.getElementById('myModal3').style.display = 'block')
             }
@@ -70,11 +72,11 @@ export default function Article() {
             <TableHead>
               <TableRow>
                 <TableCell>Labelle</TableCell>
-                <TableCell align="right">Quantite minmale</TableCell>
-                <TableCell align="right">Reference</TableCell>
-                <TableCell align="right">Type</TableCell>
-                <TableCell align="right">Modifier</TableCell>
-                <TableCell align="right">Supprimer</TableCell>
+                <TableCell align="left">Quantite minmale</TableCell>
+                <TableCell align="left">Reference</TableCell>
+                <TableCell align="left">Type</TableCell>
+                <TableCell align="left">Modifier</TableCell>
+                <TableCell align="left">Supprimer</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

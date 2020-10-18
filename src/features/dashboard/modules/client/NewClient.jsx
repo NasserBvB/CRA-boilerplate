@@ -1,17 +1,42 @@
 import React, { useState } from 'react'
 import { createClient, fetchClients } from 'features/dashboard/actions/client'
 import InputField from 'ui/components/InputField'
-import Button from 'ui/components/Button'
-import Card from 'ui/components/Card'
+import Button from '@material-ui/core/Button'
+import { makeStyles } from '@material-ui/core/styles'
 import {
   Title,
   CardWrapper,
   Center,
 } from 'features/dashboard/components/shared-style'
+import {
+  CardHeader,
+  Card,
+  CardContent,
+  Input,
+  Select,
+  MenuItem,
+} from '@material-ui/core'
+const useStyles = makeStyles({
+  root: {
+    minWidth: '300px',
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+})
 export default (props) => {
+  const classes = useStyles()
   const [adresse, setAdresse] = useState('')
   const [code, setCode] = useState('')
-  const [ville, setVille] = useState('')
+  const [ville, setVille] = useState('0')
   const [mail, setMail] = useState('')
   const [tel, setTel] = useState('')
   const [nom, setNom] = useState('')
@@ -30,88 +55,68 @@ export default (props) => {
       console.log(resp)
       const respo = await fetchClients()
       props.setClients(respo.data)
-      document.getElementById('myModal2').style.display = 'none'
     } catch (err) {
       alert('Erreur lors du creation', err.message)
     }
   }
   return (
-    <>
-      <Title>Creer Un nouveau Client</Title>
-      <CardWrapper as={Card}>
-        <InputField label="Email">
-          <input
-            type="text"
-            name="mail"
-            placeholder="Email"
-            onChange={(e) => setMail(e.target.value)}
-            value={mail}
-          />
-        </InputField>
-
-        <InputField
+    <Card className={classes.root} variant="outlined">
+      <h4>Creer Un nouveau Client</h4>
+      <CardContent style={{ display: 'grid', justifyContent: 'center' }}>
+        <Input
+          padding="5px"
+          type="text"
+          name="mail"
+          placeholder="Email"
+          onChange={(e) => setMail(e.target.value)}
+          value={mail}
+        />
+        <Select
           label="Ville"
           onChange={(e) => setVille(e.target.value)}
           value={ville}
+          placeholder="Selectionnez une ville"
         >
-          <select>
-            <option value="1">Casa</option>
-            <option value="2">Rabat</option>
-          </select>
-        </InputField>
+          <MenuItem value="0" disabled>
+            Selectionnez une ville
+          </MenuItem>
+          <MenuItem value="1">Casa</MenuItem>
+          <MenuItem value="2">Rabat</MenuItem>
+        </Select>
+        <Input
+          type="text"
+          name="nom"
+          placeholder="Nom"
+          onChange={(e) => setNom(e.target.value)}
+          value={nom}
+        />
+        <Input
+          type="text"
+          name="tel"
+          placeholder="Téléphone"
+          onChange={(e) => setTel(e.target.value)}
+          value={tel}
+        />
 
-        <InputField label="Nom">
-          <input
-            type="text"
-            name="nom"
-            placeholder="Nom"
-            onChange={(e) => setNom(e.target.value)}
-            value={nom}
-          />
-        </InputField>
-
-        <InputField label="Téléphone">
-          <input
-            type="text"
-            name="tel"
-            placeholder="Téléphone"
-            onChange={(e) => setTel(e.target.value)}
-            value={tel}
-          />
-        </InputField>
-
-        <InputField label="Adresse">
-          <input
-            type="text"
-            name="adresse"
-            placeholder="Adresse"
-            onChange={(e) => setAdresse(e.target.value)}
-            value={adresse}
-          />
-        </InputField>
-
-        <InputField label="Code">
-          <input
-            type="text"
-            name="code"
-            placeholder="Code"
-            onChange={(e) => setCode(e.target.value)}
-            value={code}
-          />
-        </InputField>
-
+        <Input
+          type="text"
+          name="adresse"
+          placeholder="Adresse"
+          onChange={(e) => setAdresse(e.target.value)}
+          value={adresse}
+        />
+        <Input
+          type="text"
+          name="code"
+          placeholder="Code"
+          onChange={(e) => setCode(e.target.value)}
+          value={code}
+        />
         <Center>
-          <Button type="submit" size="large" variant="primary" onClick={create}>
+          <Button variant="contained" color="primary" onClick={create}>
             <span>Enregistrer</span>
           </Button>
-          <Button
-            type="cancel"
-            size="large"
-            variant="primary"
-            onClick={(e) =>
-              (document.getElementById('myModal2').style.display = 'none')
-            }
-          >
+          <Button variant="contained" color="secondary">
             <span>Annuler</span>
           </Button>
         </Center>
@@ -121,7 +126,7 @@ export default (props) => {
 						<Link to="/signup">you can create one now</Link>
 					</p> */}
         </Center>
-      </CardWrapper>
-    </>
+      </CardContent>
+    </Card>
   )
 }
