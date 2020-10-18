@@ -18,13 +18,13 @@ const useStyles = makeStyles({
   },
 })
 export default (props) => {
-  const classes = useStyles()
   const [adresse, setAdresse] = useState('')
   const [code, setCode] = useState('')
   const [ville, setVille] = useState('0')
   const [mail, setMail] = useState('')
   const [tel, setTel] = useState('')
   const [nom, setNom] = useState('')
+  const classes = useStyles()
 
   const create = async (e) => {
     e.preventDefault()

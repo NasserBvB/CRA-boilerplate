@@ -28,8 +28,8 @@ const useStyles = makeStyles({
 })
 export default function Client() {
   const [clients, setClients] = useState([])
-  const classes = useStyles()
-  const [open, setOpen] = React.useState(false)
+  const classes2 = useStyles()
+  const [open, setOpen] = useState(false)
   useEffect(() => {
     async function fetchClient() {
       try {
@@ -60,13 +60,23 @@ export default function Client() {
           >
             {<NavLink to="#">Creer un Client</NavLink>}
           </Button>
-          <Modal open={open} onClose={handleClose} className={classes.Modal}>
-            <NewClient setClients={setClients} />
-          </Modal>
         </div>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          id="create-client"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px',
+          }}
+        >
+          <NewClient setClients={setClients} />
+        </Modal>
 
         <TableContainer component={Paper}>
-          <Table className={classes.table} aria-label="simple table">
+          <Table className={classes2.table} aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell>Nom</TableCell>

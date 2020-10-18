@@ -60,7 +60,13 @@ export default function Facture() {
           >
             {<NavLink to="#">Creer une facture</NavLink>}
           </Button>
-          <Modal open={open} onClose={handleClose} className={classes1.modal}>
+
+          <Modal
+            open={open}
+            id="create-facture"
+            onClose={handleClose}
+            className={classes1.modal}
+          >
             <FactureComp facture={{}} />
           </Modal>
         </div>
