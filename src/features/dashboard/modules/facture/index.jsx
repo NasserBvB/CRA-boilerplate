@@ -19,11 +19,16 @@ const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 })
 export default function Facture() {
   const [factures, setFactures] = useState([])
   const classes = useStyles()
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = useState(false)
   useEffect(() => {
     async function fetchFactures() {
       try {
@@ -36,10 +41,6 @@ export default function Facture() {
     fetchFactures()
     console.log(factures)
   }, [])
-
-  const handleOpen = () => {
-    setOpen(true)
-  }
 
   const handleClose = () => {
     setOpen(false)
@@ -58,7 +59,7 @@ export default function Facture() {
           >
             {<NavLink to="#">Creer une facture</NavLink>}
           </Button>
-          <Modal open={open} onClose={handleClose} style={{ width: '200px' }}>
+          <Modal open={open} onClose={handleClose} className={classes.modal}>
             <FactureComp facture={{}} />
           </Modal>
         </div>

@@ -16,15 +16,22 @@ import Paper from '@material-ui/core/Paper'
 
 import NewArticle from './NewArticle'
 import Utilisateur from '../utilisateur'
+import { Modal } from '@material-ui/core'
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
+  },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 })
 
 export default function Article() {
   const [articles, setArticles] = useState([])
   const classes = useStyles()
+  const [open, setOpen] = React.useState(false)
   useEffect(() => {
     async function fetchArticle() {
       try {
@@ -36,7 +43,9 @@ export default function Article() {
     }
     fetchArticle()
   }, [])
-
+  const handleClose = () => {
+    setOpen(false)
+  }
   return (
     <Container>
       <SEO url="/" title="Article" />
@@ -45,27 +54,15 @@ export default function Article() {
           <h2>Article</h2>
 
           <Button
+            onClick={(e) => setOpen(true)}
             variant="outlined"
             color="primary"
-            onClick={(e) =>
-              (document.getElementById('myModal3').style.display = 'block')
-            }
           >
             {<NavLink to="#">Creer un Article</NavLink>}
           </Button>
-          <div id="myModal3" className="modal">
-            <div className="modal-content">
-              <span
-                className="close"
-                onClick={(e) =>
-                  (document.getElementById('myModal3').style.display = 'none')
-                }
-              >
-                &times;
-              </span>
-              <NewArticle setArticles={setArticles} />
-            </div>
-          </div>
+          <Modal open={open} onClose={handleClose} className={classes.Modal}>
+            <NewArticle setArticles={setArticles} />
+          </Modal>
         </div>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="simple table">

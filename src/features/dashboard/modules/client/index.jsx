@@ -19,6 +19,12 @@ const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '20px',
+  },
 })
 export default function Client() {
   const [clients, setClients] = useState([])
@@ -37,10 +43,6 @@ export default function Client() {
     console.log(clients)
   }, [])
 
-  const handleOpen = () => {
-    setOpen(true)
-  }
-
   const handleClose = () => {
     setOpen(false)
   }
@@ -58,8 +60,8 @@ export default function Client() {
           >
             {<NavLink to="#">Creer un Client</NavLink>}
           </Button>
-          <Modal open={open} onClose={handleClose}>
-            <NewClient />
+          <Modal open={open} onClose={handleClose} className={classes.Modal}>
+            <NewClient setClients={setClients} />
           </Modal>
         </div>
 

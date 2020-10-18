@@ -17,9 +17,15 @@ import Paper from '@material-ui/core/Paper'
 import Input from '@material-ui/core/Input'
 
 import './styles.scss'
+import { Modal } from '@material-ui/core'
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
+  },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 })
 
@@ -27,6 +33,7 @@ export default function Utilisateur() {
   const [utilisateurs, setUtilisateurs] = useState([])
   const [search, setSearch] = useState('')
   const classes = useStyles()
+  const [open, setOpen] = React.useState(false)
   useEffect(() => {
     if (search === '') {
       async function fetchUtilisateurs() {
@@ -42,7 +49,9 @@ export default function Utilisateur() {
       setUtilisateurs(utilisateurs.filter((item) => item.nom.includes(search)))
     }
   }, [search])
-
+  const handleClose = () => {
+    setOpen(false)
+  }
   return (
     <Container>
       <SEO url="/" title="Utilisateur" />
@@ -56,27 +65,15 @@ export default function Utilisateur() {
             onChange={(e) => setSearch(e.target.value)}
           />
           <Button
+            onClick={(e) => setOpen(true)}
             variant="outlined"
             color="primary"
-            onClick={(e) =>
-              (document.getElementById('myModal').style.display = 'block')
-            }
           >
             {<NavLink to="#">Creer un Utilisateur</NavLink>}
           </Button>
-          <div id="myModal" className="modal">
-            <div className="modal-content">
-              <span
-                className="close"
-                onClick={(e) =>
-                  (document.getElementById('myModal').style.display = 'none')
-                }
-              >
-                &times;
-              </span>
-              <NewUtilisateur setUtilisateurs={setUtilisateurs} />
-            </div>
-          </div>
+          <Modal open={open} onClose={handleClose} className={classes.Modal}>
+            <NewUtilisateur setUtilisateurs={setUtilisateurs} />
+          </Modal>
         </div>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="simple table">

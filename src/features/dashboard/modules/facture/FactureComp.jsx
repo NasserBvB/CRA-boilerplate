@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   createFacture,
   fetchFactures,
@@ -7,6 +7,8 @@ import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import { Center } from 'features/dashboard/components/shared-style'
 import { Card, CardContent, Input, Select, MenuItem } from '@material-ui/core'
+import { fetchClients } from 'features/dashboard/actions/client'
+import { fetchArticles } from 'features/dashboard/actions/article'
 const useStyles = makeStyles({
   root: {
     minWidth: '300px',
@@ -22,7 +24,21 @@ const useStyles = makeStyles({
 })
 export default (props) => {
   const classes = useStyles()
-  const [facture, setFacture] = useState(props.facture)
+  const [facture, setFacture] = useState(
+    props.facture || { client: 0, article: 0 }
+  )
+  const [clients, setClients] = useState([])
+  const [articles, setArticles] = useState([])
+
+  useEffect(() => {
+    const fetchData = async function fetchData() {
+      const artcls = await fetchArticles()
+      const clts = await fetchClients()
+      setArticles(artcls.data)
+      setClients(clts.data)
+    }
+    fetchData()
+  }, [])
 
   const create = async (e) => {
     e.preventDefault()
@@ -42,25 +58,33 @@ export default (props) => {
           label="Client"
           onChange={(e) => setFacture({ ...facture, client: e.target.value })}
           value={facture && facture.client && facture.client.name}
-          placeholder="Selectionnez une ville"
         >
           <MenuItem value="0" disabled>
-            Selectionnez une un client
+            Selectionnez des articles
           </MenuItem>
-          <MenuItem value="1">Casa</MenuItem>
-          <MenuItem value="2">Rabat</MenuItem>
+          {articles.map((article, index) => {
+            return (
+              <MenuItem value={article.id} key={index}>
+                {article.libele}
+              </MenuItem>
+            )
+          })}
         </Select>
         <Select
           label="Client"
           onChange={(e) => setFacture(e.target.value)}
           value={facture && facture.client && facture.client.name}
-          placeholder="Selectionnez un client"
         >
-          <MenuItem value="0" disabled>
+          <MenuItem value={0} disabled>
             Selectionnez un client
           </MenuItem>
-          <MenuItem value="1">Casa</MenuItem>
-          <MenuItem value="2">Rabat</MenuItem>
+          {clients.map((client, index) => {
+            return (
+              <MenuItem value={client.id} key={index}>
+                {client.nom}
+              </MenuItem>
+            )
+          })}
         </Select>
         <Center>
           <Button variant="contained" color="primary" onClick={create}>
