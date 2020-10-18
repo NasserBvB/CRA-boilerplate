@@ -40,6 +40,7 @@ export default (props) => {
       console.log(resp)
       const respo = await fetchClients()
       props.setClients(respo.data)
+      props.setOpen(false)
     } catch (err) {
       alert('Erreur lors du creation', err.message)
     }
